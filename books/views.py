@@ -15,6 +15,14 @@ def home(request: HttpRequest):
 # function-based view:
 # CRUD: Create, Read, Update, Delete
 
+def list_books(request: HttpRequest):
+    #trebuie sa listam cartile din baza de date
+    #accesare carti:
+    #QuerySet
+    books = Book.objects.all()
+    return render(request, template_name="books/home.html", context={"books": books})
+
+
 def create_book(request: HttpRequest):
     if request.method == "POST":
         #detaliile book-ului care au fost trimise de form folosind HTTP POST request, se afla in request.POST, ca un dictionar
