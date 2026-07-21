@@ -19,7 +19,20 @@ def list_books(request: HttpRequest):
     #trebuie sa listam cartile din baza de date
     #accesare carti:
     #QuerySet
-    books = Book.objects.all()
+
+    #request.GET este un dictionar care contine toate url params
+    #"sort" este parametrul din url care ne indica ce sortare facem
+
+    sort = request.GET.get("sort")
+    books = Book.objects.all().order_by("pk")
+
+    #sorteaza cartile in ordine alfabetica chiar daca sunt cu litera mica sau mare
+    #srt_b = sorted(list(books), key=lambda x: x.title.lower())
+
+    if sort == "asc":
+        books = Book.objects.all().order_by("title")
+    if sort == "desc":
+        books = Book.objects.all().order_by("-title")
     return render(request, template_name="books/home.html", context={"books": books})
 
 
