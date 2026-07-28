@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
@@ -23,8 +23,19 @@ def login_user(request: HttpRequest):
 
 
 def register_user(request: HttpRequest):
-    pass
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            #aici se creaza userul in baza de date folosing metoda .save()
+            user = form.save()
+            login(request, user)
+            return redirect("home")
+    else:
+        form = RegisterForm()
+
+    return render(request, 'accounts/register.html', {'form': form})
 
 
 def logout_user(request: HttpRequest):
-    pass
+    logout(request)
+    return redirect("home")

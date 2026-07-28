@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 from .forms import BookForm
 from .models import Book
@@ -35,14 +36,17 @@ def list_books(request: HttpRequest):
         books = Book.objects.all().order_by("-title")
     return render(request, template_name="books/home.html", context={"books": books})
 
-
+@login_required
 def create_book(request: HttpRequest):
     if request.method == "POST":
         #detaliile book-ului care au fost trimise de form folosind HTTP POST request, se afla in request.POST, ca un dictionar
-        book_instance = BookForm(request.POST)
-        if book_instance.is_valid():
+        form = BookForm(request.POST)
+        if form.is_valid():
             #aici se creaza un book in baza de date
-            book_instance.save()
+            book = form.save(commit=False)
+            book.user = request.user
+            book.save()
+
             return redirect("create_book")
     else:
         #in cazul asta requestul poate fi GET, PUT, PATCH, DELETE, etc...
