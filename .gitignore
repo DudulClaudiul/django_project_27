@@ -1,0 +1,8 @@
+.venv
+
+*.sqlite3
+
+*.jpg
+*.webp
+*.jpeg
+*.png
