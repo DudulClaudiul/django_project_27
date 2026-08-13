@@ -59,11 +59,12 @@ def create_book(request: HttpRequest):
             book.save()
 
             return redirect("create_book")
+
     else:
         #in cazul asta requestul poate fi GET, PUT, PATCH, DELETE, etc...
         form = BookForm()
         list1 = [10, 20, 30, 40, 50]
-        return render(request, template_name="books/book_form.html", context={"form": form, "list1": list1})
+    return render(request, template_name="books/book_form.html", context={"form": form, "list1": list1})
 
 
 def update_book(request: HttpRequest, pk: int):
